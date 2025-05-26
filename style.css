@@ -1,0 +1,30 @@
+.title{
+    text-align: center;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    color:plum;
+}
+
+.background{
+    text-align: center;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    color: #black;
+background: linear-gradient(90deg, rgba(140, 42, 155, 1) 0%, rgba(19, 110, 128, 1) 50%, rgba(108, 176, 12, 1) 100%, rgba(217, 212, 182, 1) 89%);;
+    margin-top: 140px;
+    font-style: italic;
+    font-size: 20px;
+}
+
+.button{
+    margin: 15px;
+    border: 2px solid white;
+    color: white;
+    padding: 15px-20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 120px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}

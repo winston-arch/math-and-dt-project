@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+     <style>
+        .chart-container {
+            margin: 20px auto;
+            /* Atur lebar dan tinggi sesuai margin */
+            width: 800px;
+            height: 500px; 
+            overflow: auto; 
+        }
+     </style>
+</head>
+<body>
+   <h1 class="title">Displaying the weight of Peachblossoms students using a histogram</h1>
+
+    <p class="para"> A histogram is a graph that shows how data is spread out by putting the numbers into groups or ranges. It uses bars to show how many values are in each range. The bars touch each other because the ranges are connected. Each bars height tells you how many data points are in that group.
+      This histogram shows information about body mass. The data is grouped into ranges, and each bar represents how many people have body mass within that range. By looking at the height of the bars, you can see which body mass ranges are more common and which ones have fewer people. The bars are next to each other to show that the body mass values go from one range to the next without gaps.
+      I collected the data for the histogram by interviewing people and asking them to stand on a scale to measure their body mass. After recording the body mass of each person, I sorted the numbers into ranges. Then, I counted how many people were in each range and used that information to create the histogram.
+    </p>
+</head>
+<body>
+    <div>
+        <canvas id="myChart"></canvas>
+      </div>
+      
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      
+      <script>
+        var data = [35.75, 39, 42.15, 42.2, 43.30, 45, 46.05, 48.30, 50, 57.55, 61, 78.75,
+        70,58,60,51,45,49,43,90,45,45.6,34,61,44,42,54,
+        36,70,48,55,39,50,45,50,57,50,50,45,56,50,60,72,
+        78,124,67,51,81.5,55,69,65,71,50,70,70,62,65,59,75,90,50,53,60,
+        52,49.75,50.75,60,56,90,
+        49,60,49,50,69,39,70,54,42,42,44,74,60,43,45.4,58,44,39,69,47,52,55,57,55,
+        70,64,61.70,55,50.6,72.35,97,45.7,57,126];
+        var interval = [30,35,40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130];
+
+        var intervalCounts = new Array(interval.length - 1).fill(0);
+
+            data.forEach(value => {for (var i = 0; i < interval.length - 1; i++) { if (value >= interval[i] && value < interval[i + 1]){
+            intervalCounts[i]++;
+            break;
+            }
+        }
+      });
+      
+
+
+
+
+
+
+        const Winston = document.getElementById('myChart');
+      
+        new Chart(Winston, {
+          type: 'bar',
+          data: {
+            labels: interval.slice(0, -1).map((b, i) => ` ${b}-${interval[i + 1]}`),
+            datasets: [{
+              label: 'Number of people who fall in each mass interval',
+              data: intervalCounts,
+              backgroundColor: [ 
+                'rgb(0,16,246)',
+                'rgb(0,134,246)',
+                'rgb(0,228,246)',
+                'rgb(68,0,246)',
+                'rgb(137,0,246)',
+                'rgb(246,0,85)',
+                'rgb(77,155,211)',
+                'rgb(77,206,211)',
+                'rgb(211,77,91)',
+                ' rgb(139,59,120)',
+                'rgb(59,139,105)',
+                ' rgb(120,139,59)',
+                'rgb(235,246,199)',
+                'rgb(240,200,59)',
+                'rgb(240,134,59)',
+                'rgb(241,229,220)',
+                'rgb(73,25,25)',
+                'rgb(15,11,117)',
+            ],
+              borderWidth: 1,
+              barPercentage: 1.0,
+              categoryPercentage: 1.0,
+            }]
+          },
+          options: {
+            scales: {
+              y: {
+                beginAtZero: true
+              }
+            }
+          }
+        });
+      </script>
+
+          
+
+      
+      
+</body>
+</html>

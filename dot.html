@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dot Plot Jumlah Siswa per Kelas - D3.js</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        .chart-container {
+            margin: 20px auto;
+            /* Atur lebar dan tinggi sesuai margin */
+            width: 800px;
+            height: 450px;
+        }
+
+        .axis path,
+        .axis line {
+            fill: none;
+            stroke: #000;
+            shape-rendering: crispEdges;
+        }
+
+        .axis text {
+            font-family: sans-serif;
+            font-size: 10px;
+        }
+
+        .dot {
+            fill: steelblue; /* Warna titik */
+            stroke: black; /* Border titik */
+            stroke-width: 1;
+        }
+
+        .chart-title {
+            font-family: sans-serif;
+            font-size: 16px;
+            font-weight: bold;
+            text-anchor: middle;
+        }
+
+        .axis-title {
+             font-family: sans-serif;
+             font-size: 12px;
+             text-anchor: middle;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="chart-container">
+        </div>
+
+    <script>
+        // Data jumlah siswa per kelas
+        const rawDataSiswa = {
+            'Justice': 14,
+            'Wisdom': 15,
+            'Integrity': 12,
+            'Courage': 24,
+            'Prudence': 10
+        };
+
+        // Array untuk label sumbu X (nama-nama kelas)
+        const classLabels = Object.keys(rawDataSiswa);
+
+        // Konfigurasi dimensi chart dan margin
+        const margin = { top: 50, right: 30, bottom: 60, left: 50 };
+        const containerWidth = 800;
+        const containerHeight = 450;
+        const width = containerWidth - margin.left - margin.right;
+        const height = containerHeight - margin.top - margin.bottom;
+
+        // Buat elemen SVG di dalam container
+        const svg = d3.select(".chart-container")
+            .append("svg")
+            .attr("width", containerWidth)
+            .attr("height", containerHeight)
+            .append("g")
+            .attr("transform", `translate(${margin.left},${margin.top})`);
+
+        // Skala X (skala band untuk kategori)
+        const xScale = d3.scaleBand()
+            .domain(classLabels) // Domain adalah nama-nama kelas
+            .range([0, width]) // Rentang visual pada sumbu X
+            .padding(0.5); // Padding antar band
+
+        // Hitung jumlah siswa maksimum untuk skala Y
+        const maxStudents = d3.max(Object.values(rawDataSiswa));
+
+        // Skala Y (skala linear untuk hitungan/posisi tumpukan)
+        const yScale = d3.scaleLinear()
+            .domain([0, maxStudents + 2]) // Domain dari 0 hingga jumlah siswa maksimum + sedikit ruang
+            .range([height, 0]); // Rentang visual pada sumbu Y (tinggi chart, 0)
+
+        // Buat data point untuk D3.js (untuk efek tumpukan)
+        const chartDataPoints = [];
+        for (const className in rawDataSiswa) {
+            if (rawDataSiswa.hasOwnProperty(className)) {
+                const studentCount = rawDataSiswa[className];
+                for (let i = 1; i <= studentCount; i++) {
+                    chartDataPoints.push({
+                        className: className, // Simpan nama kelas
+                        studentPosition: i, // Simpan posisi dalam tumpukan
+                        classIndex: classLabels.indexOf(className) // Simpan index kelas
+                    });
+                }
+            }
+        }
+
+        // Tambahkan titik-titik (lingkaran) ke SVG
+        svg.selectAll(".dot")
+            .data(chartDataPoints)
+            .enter()
+            .append("circle")
+            .attr("class", "dot")
+            .attr("cx", d => xScale(d.className) + xScale.bandwidth() / 2) // Posisi X di tengah band kategori
+            .attr("cy", d => yScale(d.studentPosition)) // Posisi Y berdasarkan posisi siswa dalam tumpukan
+            .attr("r", 4); // Radius titik
+
+        // Tambahkan sumbu X
+        svg.append("g")
+            .attr("class", "x axis")
+            .attr("transform", `translate(0,${height})`)
+            .call(d3.axisBottom(xScale));
+
+        // Tambahkan label sumbu X
+         svg.append("text")
+            .attr("class", "axis-title")
+            .attr("x", width / 2)
+            .attr("y", height + margin.bottom - 10)
+            .text("Kelas");
+
+
+        // Tambahkan sumbu Y
+        svg.append("g")
+            .attr("class", "y axis")
+            .call(d3.axisLeft(yScale)
+                   .tickValues(d3.range(0, maxStudents + 1, 5))); // Tampilkan tick setiap 5 siswa, sesuaikan jika perlu
+
+
+         // Tambahkan label sumbu Y
+         svg.append("text")
+            .attr("class", "axis-title")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 0 - margin.left + 10) // Sesuaikan posisi
+            .attr("x", 0 - (height / 2))
+            .attr("dy", "1em") // Sesuaikan posisi
+            .text("Jumlah Siswa");
+
+         // Tambahkan judul chart
+         svg.append("text")
+            .attr("class", "chart-title")
+            .attr("x", width / 2)
+            .attr("y", 0 - (margin.top / 2)) // Posisikan di atas chart
+            .text("Jumlah Siswa per Kelas di Peachblossoms School");
+
+    </script>
+
+</body>
+</html>
